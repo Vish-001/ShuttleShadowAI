@@ -63,14 +63,22 @@ class SessionRunner {
     }
 
     activateCorner() {
-        this.resetAllTargets();
-        const corners = ["TOP_LEFT", "TOP_RIGHT", "BOTTOM_LEFT", "BOTTOM_RIGHT"];
-        this.currentZone = this.mode === 'IMPROVE' && Math.random() < 0.66 ? this.weakestZone : corners[Math.floor(Math.random() * 4)];
-        const corner = document.getElementById(this.currentZone);
-        if (corner) {
-            corner.classList.add("active");
-            this.startTime = Date.now();
-        }
+      this.resetAllTargets();
+      const corners = ["TOP_LEFT", "TOP_RIGHT", "BOTTOM_LEFT", "BOTTOM_RIGHT"];
+      
+      // Ensure mode comparison is case-insensitive
+      const isImproveMode = this.mode.toUpperCase() === 'IMPROVE';
+      
+      // 66% chance to select weakest zone in Improve Mode
+      this.currentZone = isImproveMode && Math.random() < 0.66 
+        ? this.weakestZone 
+        : corners[Math.floor(Math.random() * 4)];
+      
+      const corner = document.getElementById(this.currentZone);
+      if (corner) {
+        corner.classList.add("active");
+        this.startTime = Date.now();
+      }
     }
 
     handleZoneClick(zoneId) {
