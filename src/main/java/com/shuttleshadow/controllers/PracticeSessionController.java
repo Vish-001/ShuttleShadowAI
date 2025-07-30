@@ -33,23 +33,38 @@ public class PracticeSessionController {
         return "session_mode";
     }
 
-    @PostMapping("/session/start")
-    public String startSession(@RequestParam("mode") Mode mode,
-                               HttpSession session,
-                               RedirectAttributes redirectAttributes) {
-        Users user = (Users) session.getAttribute("user");
-        if (user == null) return "redirect:/login";
+   @PostMapping("/session/start")
+public String startSession(@RequestParam("mode") String mode,  // Accept as String instead of Enum
+                          HttpSession session,
+                          RedirectAttributes redirectAttributes) {
+    Users user = (Users) session.getAttribute("user");
+    if (user == null) return "redirect:/login";
 
-        try {
-            PracticeSession newSession = sessionService.startSession(user, mode);
-            session.setAttribute("currentSessionId", newSession.getId());
-            session.setAttribute("sessionMode", mode.name());
-            return "redirect:/session/run";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Failed to start session");
+    try {
+        // Convert mode to uppercase for consistency
+        String normalizedMode = mode.toUpperCase();
+        
+        // Validate mode (either "MEDIUM" or "IMPROVE")
+        if (!"MEDIUM".equals(normalizedMode) && !"IMPROVE".equals(normalizedMode)) {
+            redirectAttributes.addFlashAttribute("error", "Invalid session mode");
             return "redirect:/dashboard";
         }
+
+        // Convert to Enum (if still needed for service layer)
+        Mode sessionMode = Mode.valueOf(normalizedMode);
+        
+        PracticeSession newSession = sessionService.startSession(user, sessionMode);
+        session.setAttribute("currentSessionId", newSession.getId());
+        session.setAttribute("sessionMode", normalizedMode); // Store as uppercase String
+        return "redirect:/session/run";
+    } catch (IllegalArgumentException e) {
+        redirectAttributes.addFlashAttribute("error", "Invalid session mode");
+        return "redirect:/dashboard";
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("error", "Failed to start session");
+        return "redirect:/dashboard";
     }
+}
 
     @GetMapping("/session/run")
     public String runSessionPage(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
