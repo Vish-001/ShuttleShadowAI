@@ -1,0 +1,19 @@
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.alert-success {
+    background: rgba(46, 204, 113, 0.2);
+    border-left: 4px solid #2ecc71;
+    color: #2ecc71;
+}
+.alert-danger {
+    background: rgba(231, 76, 60, 0.2);
+    border-left: 4px solid #e74c3c;
+    color: #e74c3c;
+}

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Session Mode – ShadowShuttleAI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --neon-blue: #00f3ff;
+      --neon-pink: #ff00ff;
+      --neon-purple: #bd00ff;
+      --dark-bg: #0a0a18;
+      --darker-bg: #050510;
+      --card-bg: rgba(15, 15, 35, 0.7);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    body {
+      background: var(--darker-bg);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    header {
+      padding: 1.5rem 2rem;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 10, 24, 0.8);
+      border-bottom: 1px solid var(--neon-blue);
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px var(--neon-blue);
+      animation: pulse 2s infinite alternate;
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+    }
+
+    .mode-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 2rem auto;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .mode-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 1.5rem;
+      width: 300px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(100, 100, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .mode-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 243, 255, 0.3);
+    }
+
+    .mode-card.standard {
+      border-left: 4px solid #ffc107;
+    }
+
+    .mode-card.improve {
+      border-left: 4px solid var(--neon-pink);
+    }
+
+    .mode-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mode-description {
+      font-size: 1rem;
+      color: #a0a0c0;
+    }
+
+    .back-btn {
+      color: var(--neon-blue);
+      text-decoration: none;
+      margin-top: 1rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--neon-pink);
+      text-shadow: 0 0 10px var(--neon-pink);
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 15px var(--neon-blue); }
+      100% { box-shadow: 0 0 25px var(--neon-purple); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .mode-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .mode-card {
+        width: 100%;
+        max-width: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="particles-js"></div>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">
+      <i class="fas fa-table-tennis"></i>
+    </div>
+    <div class="logo-text">ShuttleShadowAI</div>
+  </div>
+</header>
+
+<div class="mode-container">
+  <form th:action="@{/session/start}" method="post">
+    <div class="mode-card standard" onclick="this.closest('form').elements['mode'].value='MEDIUM'; this.closest('form').submit();">
+      <div class="mode-title">Standard Mode</div>
+      <div class="mode-description">Practice with random court zones to improve overall reaction time.</div>
+      <input type="hidden" name="mode" value="MEDIUM"/>
+    </div>
+    <div class="mode-card improve" onclick="this.closest('form').elements['mode'].value='IMPROVE'; this.closest('form').submit();">
+      <div class="mode-title">Improve Mode</div>
+      <div class="mode-description">Focus on your weakest zone to enhance specific skills.</div>
+      <input type="hidden" name="mode" value="IMPROVE"/>
+    </div>
+  </form>
+  <a th:href="@{/dashboard}" class="back-btn">Back to Dashboard</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+  particlesJS('particles-js', {
+    particles: {
+      number: { value: 80, density: { enable: true, value_area: 800 } },
+      color: { value: "#00f3ff" },
+      shape: { type: "circle" },
+      opacity: { value: 0.5, random: true },
+      size: { value: 3, random: true },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: "#bd00ff",
+        opacity: 0.2,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 2,
+        direction: "none",
+        random: true,
+        straight: false,
+        out_mode: "out",
+        bounce: false
+      }
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: true, mode: "grab" },
+        onclick: { enable: true, mode: "push" },
+        resize: true
+      },
+      modes: {
+        grab: { distance: 140, line_linked: { opacity: 1 } },
+        push: { particles_nb: 4 }
+      }
+    },
+    retina_detect: true
+  });
+</script>
+</body>
+</html>

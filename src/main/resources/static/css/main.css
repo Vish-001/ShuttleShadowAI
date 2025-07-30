@@ -1,0 +1,41 @@
+/*main.css*/
+.session-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.session-loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: var(--neon-blue);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .stats-overlay {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .stat-item {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+}
