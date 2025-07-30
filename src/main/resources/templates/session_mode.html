@@ -181,18 +181,24 @@
 </header>
 
 <div class="mode-container">
-  <form th:action="@{/session/start}" method="post">
-    <div class="mode-card standard" onclick="this.closest('form').elements['mode'].value='MEDIUM'; this.closest('form').submit();">
+  <!-- Standard Mode Card (Separate Form) -->
+  <form id="standardForm" th:action="@{/session/start}" method="post">
+    <div class="mode-card standard" onclick="this.closest('form').submit();">
       <div class="mode-title">Standard Mode</div>
       <div class="mode-description">Practice with random court zones to improve overall reaction time.</div>
       <input type="hidden" name="mode" value="MEDIUM"/>
     </div>
-    <div class="mode-card improve" onclick="this.closest('form').elements['mode'].value='IMPROVE'; this.closest('form').submit();">
+  </form>
+
+  <!-- Improve Mode Card (Separate Form) -->
+  <form id="improveForm" th:action="@{/session/start}" method="post">
+    <div class="mode-card improve" onclick="this.closest('form').submit();">
       <div class="mode-title">Improve Mode</div>
       <div class="mode-description">Focus on your weakest zone to enhance specific skills.</div>
       <input type="hidden" name="mode" value="IMPROVE"/>
     </div>
   </form>
+
   <a th:href="@{/dashboard}" class="back-btn">Back to Dashboard</a>
 </div>
 
